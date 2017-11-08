@@ -1,16 +1,17 @@
+const express = require('express');
+const router = express.Router();
 const passport = require('passport');
+// handle authentication routes
+router.get('/', 
+passport.authenticate('google', {
+    scope: ['profile', 'email']
+})
+);
 
-module.exports = (app) => {
-    app.get('/auth/google', 
-    passport.authenticate('google', {
-     scope: ['profile', 'email']
-    })
-    );
-    
-    app.get('/auth/google/callback', 
-    passport.authenticate('google', { failureRedirect: '/login' }),
-    function(req, res) {
-    res.redirect('/');
-    });
+router.get('/callback', 
+passport.authenticate('google', { failureRedirect: '/login' }),
+function(req, res) {
+res.redirect('/');
+});
 
-};
+module.exports = router;
