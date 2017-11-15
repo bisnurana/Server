@@ -31,7 +31,7 @@ app.use('/', indexRoutes);
 app.use('/auth/google', authRoutes);
 app.use('/api', apiRoutes);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, function(){
     console.log("Server running at port " + PORT);
 });

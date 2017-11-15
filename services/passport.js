@@ -24,22 +24,17 @@ passport.use(new GoogleStrategy({
     // to fix redirect error
     proxy: true
 }, 
-function(accessToken, refreshToken, profile, done){
+async function(accessToken, refreshToken, profile, done){
     //async queries request that yield promise
-    User.findOne({ googleId: profile.id })
-    .then((existingUser) => {
+    const existingUser = await User.findOne({ googleId: profile.id });
         if (existingUser) {
             //already a user
-            done(null, existingUser);
-
-        } else {
-            //create a new user
-            new User({ googleId: profile.id})
-            .save()
-            .then( user => done(null, user));
+            return done(null, existingUser);
         }
-
-    })
-    
-}
-));
+        //create a new user
+        const user = await new User({ googleId: profile.id}).save();
+        done(null, user);
+        
+    }
+ )
+);
