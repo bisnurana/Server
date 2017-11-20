@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import { Link } from 'react-router-dom';
+import Stripe from './Stripe';
 
 class Header extends Component {
   renderContent() {
@@ -15,11 +16,17 @@ class Header extends Component {
           </li>
         );
       default:
-        return (
-          <li>
+        return [
+          <li key="3" style={{ margin: 'auto 10px' }}>
+            Credits: {this.props.auth.credits}
+          </li>,
+          <li key="1">
+            <Stripe />
+          </li>,
+          <li key="2">
             <a onClick={this.props.logoutUser}>Log out</a>
           </li>
-        );
+        ];
     }
   }
   render() {
@@ -43,6 +50,9 @@ class Header extends Component {
   }
 }
 function mapStateToProps(state) {
-  return { auth: state.auth };
+  return {
+    auth: state.auth,
+    users: state.users
+  };
 }
 export default connect(mapStateToProps, actions)(Header);

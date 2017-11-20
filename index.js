@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
+const bodyParser = require('body-parser');
 const keys = require('./config/keys');
 const authRoutes = require('./routes/authRoutes');
 const apiRoutes = require('./routes/user');
@@ -11,6 +12,8 @@ require('./services/passport');
 //connect to mongo database
 mongoose.connect(keys.mongoURI);
 const app = express();
+// use body parser middleware
+app.use(bodyParser.json());
 
 //setting cookies
 app.use(
@@ -27,6 +30,16 @@ app.use(passport.session());
 //handle routes
 app.use('/auth/google', authRoutes);
 app.use('/api', apiRoutes);
+//handle routes in production
+if (process.env.NODE_ENV === 'production') {
+  //serve assets
+  app.use(express.static('client/build'));
+  //serve index.html if path unrecognized
+  const path = require('path');
+  app.get('*', function(req, res) {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, function() {

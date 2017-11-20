@@ -8,3 +8,8 @@ export const logoutUser = () => async dispatch => {
   await axios.get('/api/logout');
   dispatch({ type: LOGOUT_USER });
 };
+
+export const handleToken = token => async dispatch => {
+  const res = await axios.post('/api/stripe', token);
+  dispatch({ type: FETCH_USER, payload: res.data });
+};
