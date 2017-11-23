@@ -6,8 +6,10 @@ const bodyParser = require('body-parser');
 const keys = require('./config/keys');
 const authRoutes = require('./routes/authRoutes');
 const apiRoutes = require('./routes/user');
+const surveyRoutes = require('./routes/surveyRoutes');
 //models must be imported before passport because passport need access to models when server loads
 require('./models/user');
+require('./models/survey');
 require('./services/passport');
 //connect to mongo database
 mongoose.connect(keys.mongoURI);
@@ -30,6 +32,7 @@ app.use(passport.session());
 //handle routes
 app.use('/auth/google', authRoutes);
 app.use('/api', apiRoutes);
+app.use('/api/surveys', surveyRoutes);
 //handle routes in production
 if (process.env.NODE_ENV === 'production') {
   //serve assets

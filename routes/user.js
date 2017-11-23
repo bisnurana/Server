@@ -1,7 +1,10 @@
 const express = require('express');
 const keys = require('../config/keys');
 const stripe = require('stripe')(keys.stripeSecretKey);
+const mongoose = require('mongoose');
 const requireLogin = require('../middlewares/requireLogin');
+const requireCredit = require('../middlewares/requireCredit');
+
 const router = express.Router();
 
 // logging out user
